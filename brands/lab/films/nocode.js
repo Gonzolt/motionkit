@@ -604,7 +604,8 @@ function render(t) {
   {
     charIn(made12.chars, t, { start: ws(12, 0) - 0.04, each: 0.025, dur: 0.4, ease: E.outExpo, from: { y: 1.15 } });
     const c = ws(12, 2) - 0.03;
-    const w = t < c ? 62 : 62 + 50 * spring(t - c, { duration: 0.55, bounce: 0.4 });
+    // 106, not 112: CODE is wider than the old word and needs margin at the overshoot
+    const w = t < c ? 62 : 62 + 44 * spring(t - c, { duration: 0.55, bounce: 0.4 });
     wdth(word12, w);
     opacity(word12, t >= c ? 1 : 0);
     const k = clamp((t - c) / 0.18);
