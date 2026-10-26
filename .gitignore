@@ -2,6 +2,7 @@ node_modules/
 .venv/
 out/
 *.mp4
+!media/*.mp4
 *.mov
 *.wav
 *.mp3

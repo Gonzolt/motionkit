@@ -8,6 +8,13 @@ can be rendered, inspected and re-rendered exactly.
 A film is an HTML page plus a `render(t)` function. Headless Chromium steps
 through it one frame at a time and ffmpeg encodes the result.
 
+**Example output:** [`media/nocode.mp4`](media/nocode.mp4) (29 s, 1080x1920,
+30 fps, with sound), rendered with
+`node tools/export.mjs --film lab/nocode --fps 30 --blur 12 --shutter 0.4`.
+It is an earlier render: the last line differs from the current script.
+
+[![nocode, contact sheet](media/nocode-sheet.jpg)](media/nocode.mp4)
+
 Two example films are included:
 
 | Film | What it shows |
