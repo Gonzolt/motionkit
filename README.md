@@ -31,7 +31,7 @@ Two example films are included:
 | --- | --- | --- |
 | Node.js | 20 or newer | rendering, tools |
 | ffmpeg + ffprobe | 5 or newer, on `PATH` | encoding, strips, audio |
-| Python | 3.10 or newer | voiceover, sound, rhythm graph |
+| Python | 3.10 or newer | voiceover (edge-tts, Piper), sound, rhythm graph |
 | Disk | about 1 GB | Chromium download plus the whisper model |
 
 `npm install` downloads its own Chromium through puppeteer, so no system
@@ -154,6 +154,33 @@ retimes itself. To use your own recording instead of TTS, replace the
 per-line clips (`line00.mp3`...) with your takes and keep the same file names.
 
 Voice: `en-US-BrianNeural`. List others with `edge-tts --list-voices`.
+
+### Voice engines
+
+Every `make_vo.py` renders through `tools/voice/tts.py`, so the engine is an
+environment variable and the script does not change:
+
+| `TTS_ENGINE` | Runs | Cost | Default voice |
+| --- | --- | --- | --- |
+| `edge` (default) | online | free | `en-US-BrianNeural` |
+| `piper` | offline, CPU | free | `en_US-ryan-high` (Norwegian: `no_NO-talesyntese-medium`) |
+| `elevenlabs` | online | paid, `ELEVENLABS_API_KEY` | George (`JBFqnCBsd6RMkjVDRZzb`) |
+
+```bash
+TTS_ENGINE=piper python make_vo.py
+TTS_ENGINE=piper TTS_VOICE=no_NO-talesyntese-medium python make_vo.py
+python tools/voice/tts.py --engine piper --list
+```
+
+Piper voices download to `~/.cache/piper` on first use. Clips are cached per
+engine, so switching engines never reuses another engine's audio.
+
+## Skills
+
+`.claude/skills/` holds Claude Code skills for the voice, editing, music and
+sound side of a film. Claude loads them by itself when it works in this repo;
+start with `motionkit`. The index, sources and licences are in
+[`.claude/skills/README.md`](.claude/skills/README.md).
 
 ## Troubleshooting
 

@@ -2,17 +2,21 @@
 """Voiceover for lab/nocode: one TTS clip per line, assembled with chosen gaps,
 then word timestamps from faster-whisper so the film can cut on the words.
 
-    python3 make_vo.py            # writes vo.wav, words.json, ../../films/nocode.words.js
+    python3 make_vo.py                      # writes vo.wav, words.json, ../../films/nocode.words.js
+    TTS_ENGINE=piper python3 make_vo.py     # same, rendered offline with Piper (tools/voice/tts.py)
 
 The pauses are the edit. TTS reads a paragraph at one even pace; the reference
 style lives on hard stops ("No way." ... beat ... "Okay. Okay."), so every line
 is its own clip and the silence between them is set here, by hand.
 """
-import asyncio, json, os, subprocess, wave
+import asyncio, json, os, subprocess, sys, wave
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VOICE = 'en-US-BrianNeural'
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', '..', 'tools', 'voice'))
+import tts  # noqa: E402
+
+VOICE = tts.voice_for(tts.ENGINE)   # en-US-BrianNeural on the default edge engine
 SR = 48000
 
 # (text, rate, gap BEFORE this line in seconds)
@@ -34,15 +38,6 @@ LINES = [
 TAIL = 1.6
 
 
-# edge-tts < 7.3 gets HTTP 403 from Microsoft's endpoint; keep it current
-# (pip install -U edge-tts). Override the binary with EDGE_TTS=/path/to/edge-tts.
-EDGE = os.environ.get('EDGE_TTS', 'edge-tts')
-
-
-async def tts(text, rate, path):
-    subprocess.run([EDGE, '--voice', VOICE, f'--rate={rate}', '--text', text, '--write-media', path], check=True)
-
-
 def decode(path):
     raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'],
                          capture_output=True, check=True).stdout
@@ -56,9 +51,7 @@ async def main():
     parts, lines = [], []
     t = 0.0
     for i, (text, rate, gap) in enumerate(LINES):
-        p = os.path.join(HERE, f'line{i:02d}.mp3')
-        if not os.path.exists(p):
-            await tts(text, rate, p)
+        p = tts.synth(text, os.path.join(HERE, f'line{i:02d}'), rate, voice=VOICE)
         a = decode(p)
         parts.append(np.zeros(int(gap * SR), np.float32))
         t += gap

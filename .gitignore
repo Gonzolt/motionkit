@@ -10,3 +10,4 @@ out/
 .env
 .env.*
 __pycache__/
+!.claude/skills/agent-sounds/hooks/sounds/**/*.wav
