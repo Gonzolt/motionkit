@@ -1,0 +1,28 @@
+/* Only the typeface lives here; lib/film.css owns the frame. */
+@font-face {
+  font-family: 'Inter';
+  src: url('assets/fonts/Inter-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                 U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  font-display: block;
+}
+body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+#stage { font-family: 'Inter', system-ui, sans-serif; }
+
+/* Archivo with BOTH variable axes (wdth 62–125, wght 100–900): the width axis is
+   what makes a real letter stretch, not a scaleX that fattens the strokes. */
+@font-face {
+  font-family: 'Archivo';
+  src: url('assets/fonts/Archivo-wdth.woff2') format('woff2');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Plex Mono';
+  src: url('assets/fonts/IBMPlexMono-500.woff2') format('woff2');
+  font-weight: 500;
+  font-display: block;
+}

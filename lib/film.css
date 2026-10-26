@@ -1,0 +1,167 @@
+/* The projector's furniture: the frame, the stage, and the dev chrome.
+ *
+ * Brand-neutral by design — there is not a single brand colour in here. The
+ * greys are the room the film is reviewed in, not part of any product, and
+ * they all disappear under `?export` anyway.
+ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  font-family: system-ui, sans-serif;
+}
+
+/* The frame the film is fitted into. Under ?export it is exactly 1080x1920
+   and the browser window is the same, so the capture is 1:1 with no resample. */
+#frame {
+  position: absolute;
+  inset: 0 0 72px 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+body.nochrome #frame { inset: 0; }
+
+/* 1080x1920, scaled to fit by stage.js. Everything the film draws is a child
+   of this and is authored in FRAME pixels — never in window pixels. */
+#stage {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  flex: none;
+  overflow: hidden;
+  background: #000;
+  transform-origin: 50% 50%;
+}
+
+/* The layer the app's screen lives on. A brand's theme.css owns what is
+   inside it; this only says where it is. */
+#screen {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  overflow: hidden;
+}
+
+#captionLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* TikTok guide approximated from the app's layout over a 1080x1920 post. The clear area is not rectangular: it uses the free upper-right area
+   and curves around TikTok's profile photo, then avoids the actions below.
+   UI positions still vary by device, captions and placement. Review only. */
+#safeZone {
+  position: absolute;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  display: none;
+  color: #fff;
+  font: 600 26px/1.2 ui-monospace, monospace;
+  letter-spacing: 2px;
+}
+body.safe-zone #safeZone { display: block; }
+body.nochrome #safeZone { display: none; }
+body.nochrome.safe-zone.safe-zone-capture #safeZone { display: block; }
+#safeZone svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+#safeZone .safe-shade { fill: rgba(0, 0, 0, .65); }
+#safeZone .safe-outline {
+  fill: none;
+  stroke: rgba(255, 255, 255, .8);
+  stroke-width: 3px;
+  stroke-dasharray: 6 4;
+}
+#safeZone > div { position: absolute; }
+#safeZone .safe-top { top: 35px; left: 35px; }
+#safeZone .safe-bottom { top: 1770px; left: 300px; }
+#safeZone .safe-right {
+  top: 1120px;
+  right: 18px;
+  writing-mode: vertical-rl;
+}
+
+/* The finger. One per film — see finger() in lib/dom.js. */
+#touch {
+  position: absolute;
+  left: 0; top: 0;
+  width: 0; height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+#touch > i {
+  position: absolute;
+  left: -54px; top: -54px;
+  width: 108px; height: 108px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0);
+  background: rgba(255, 255, 255, .13);
+  display: block;
+}
+
+/* ---------- dev chrome ---------- */
+
+#devbar {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  background: #0c0f11;
+  border-top: 1px solid #1b2226;
+  color: #c7d2d8;
+  font: 500 13px/1 ui-monospace, monospace;
+}
+#devbar.hide { display: none; }
+
+#devbar button {
+  min-width: 44px;
+  height: 36px;
+  border: 1px solid #263036;
+  border-radius: 8px;
+  background: #141a1e;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+#devbar button:hover { background: #1b2328; }
+#safeBtn[aria-pressed="true"] { border-color: #8a979e; color: #fff; }
+
+#scrubWrap { position: relative; flex: 1; height: 36px; }
+
+#scrub {
+  position: absolute;
+  inset: auto 0 6px 0;
+  width: 100%;
+  accent-color: #6ee7d8;
+}
+
+#scrubMarks { position: absolute; inset: 0 0 18px 0; }
+#scrubMarks i {
+  position: absolute;
+  top: 2px;
+  width: 1px; height: 8px;
+  background: #3a464c;
+}
+#scrubMarks b {
+  position: absolute;
+  top: 11px;
+  transform: translateX(2px);
+  font: 400 9px/1 ui-monospace, monospace;
+  color: #5b686f;
+  white-space: nowrap;
+}
+
+#tc { min-width: 108px; text-align: right; color: #8a979e; }
