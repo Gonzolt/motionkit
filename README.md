@@ -13,7 +13,10 @@ through it one frame at a time and ffmpeg encodes the result.
 `node tools/export.mjs --film lab/nocode --fps 30 --blur 12 --shutter 0.4`.
 It is an earlier render: the last line differs from the current script.
 
-[![nocode, contact sheet](media/nocode-sheet.jpg)](media/nocode.mp4)
+<p align="center">
+  <a href="media/nocode.mp4"><img src="media/nocode.gif" width="360" alt="nocode: preview (no sound). Click for the mp4 with sound."></a>
+  <br><sub>Preview without sound. Click it for the mp4 with sound.</sub>
+</p>
 
 Two example films are included:
 
