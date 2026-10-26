@@ -30,4 +30,11 @@ assert.ok(stagger(0.1, 3, { each: 0.1 }) === 0 && stagger(5, 3) === 1);
 // counters
 import { fmtInt, fmtShort } from '../lib/type.js';
 assert.equal(fmtInt(256929), '256,929'); assert.equal(fmtShort(51713500), '51.7M'); assert.equal(fmtShort(399), '399');
+// tool arguments: one argv entry per value, so paths with spaces or `--` survive
+import { parseArgs } from '../tools/browser.mjs';
+assert.deepEqual(parseArgs(['--film', 'lab/ace', '--fps', '30', '--blur', '12', '--safe-zone']),
+  { film: 'lab/ace', fps: '30', blur: '12', 'safe-zone': 'true' });
+assert.deepEqual(parseArgs(['--out', 'C:\Users\me\My Videos\ace.mp4', '--audio', 'C:\Temp\C--Users-me\mix.m4a']),
+  { out: 'C:\Users\me\My Videos\ace.mp4', audio: 'C:\Temp\C--Users-me\mix.m4a' });
+assert.deepEqual(parseArgs(['--out=out/a b.mp4', '--at', '1.2,13.6']), { out: 'out/a b.mp4', at: '1.2,13.6' });
 console.log('motion.test.mjs ok');

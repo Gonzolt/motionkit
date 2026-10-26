@@ -34,11 +34,21 @@ export function findChrome() {
 }
 
 /** `--fps 30 --film lab/nocode` → `{ fps: '30', film: 'lab/nocode' }` */
+/**
+ * `--key value`, `--key=value` or a bare `--flag` (= 'true'). Each value is one
+ * argv entry, so a path with spaces or a `--` inside it (C--Users-..., quoted
+ * "My Videos\x.mp4") arrives whole instead of being split into new keys.
+ */
 export function parseArgs(argv) {
-  return Object.fromEntries(
-    argv.join(' ').split('--').filter(Boolean)
-      .map((s) => s.trim().split(/\s+/)).map(([k, v = 'true']) => [k, v]),
-  );
+  const out = {};
+  for (let i = 0; i < argv.length; i++) {
+    if (!argv[i].startsWith('--')) continue;
+    const [k, inline] = argv[i].slice(2).split(/=(.*)/s);
+    if (inline !== undefined) out[k] = inline;
+    else if (i + 1 < argv.length && !argv[i + 1].startsWith('--')) out[k] = argv[++i];
+    else out[k] = 'true';
+  }
+  return out;
 }
 
 /**
