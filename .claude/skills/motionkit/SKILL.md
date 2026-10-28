@@ -1,6 +1,6 @@
 ---
 name: motionkit
-description: Make a film with this repo — kinetic type, transitions, camera rig and motion blur written as render(t), cut to a word-timed voiceover, with sound effects on the same cues and a music bed under it. Use for any request to make, retime, voice, score or export a motionkit film, to swap the voice engine (edge-tts, offline Piper, ElevenLabs), or to decide which of the voice / editing / music / sound skills in this repo to load next.
+description: Make a film with this repo — kinetic type, transitions, camera rig and motion blur written as render(t), cut to a word-timed voiceover, with sound effects on the same cues and a music bed under it. Use for any request to make, retime, voice, score or export a motionkit film, to add effects or captions, to swap the voice engine (edge-tts, offline Piper, ElevenLabs), or to decide which of the picture / voice / editing / music / sound skills in this repo to load next.
 ---
 
 # motionkit
@@ -28,6 +28,8 @@ and motion blur (sub-frame sampling) all go wrong at once.
 4. **Picture.** Build the DOM once, write `render(t)`. Check single moves with
    `node tools/strip.mjs --film <brand>/<film> --from A --to B --fps 30`, the
    whole film with `tools/shot.mjs --sheet 24`.
+   Effects (grain, split, flash, leaks, sparks…) hang off the same cues:
+   `film-fx`. Captions come from the same words.js: `subtitles`.
 5. **Sound.** `make_sfx.py` synthesises effects on the *same* cues, so a thump
    and its camera punch land on the same frame. Then the music bed (below).
 6. **Master and export.** Loudness, then `tools/export.mjs` (preview without
@@ -92,6 +94,10 @@ the script. A word that went missing is covered by an effect or the bed.
 
 | Job | Skill |
 |---|---|
+| Effects: grain, RGB split, flash, leaks, flare, warp, sparks, speed lines, grade | `film-fx` (catalogue film: `lab/fxlab`) |
+| Captions in the film, SRT/VTT/ASS, burn-in, transcribe a clip | `subtitles` |
+| Headline and title reveals, lyric videos | `kinetic-typography` (motionkit's own primitives: `lib/type.js`) |
+| Grade footage, match shots, looks | `color-grading-finishing` |
 | Raw talking-head footage to a finished, captioned package | `i-hate-editing` |
 | Cut rhythm, J/L cuts, speed ramps, cutting to BPM | `beat-sync-editing` |
 | Structure, montage, pacing of a whole piece | `editing-montage` |
@@ -103,7 +109,7 @@ the script. A word that went missing is covered by an effect or the bed.
 | Generate music | `elevenlabs-music`, `genai-music-producer` |
 | Offline voice | `piper-tts` |
 | Cloud voice, voice design, audio tags | `elevenlabs-text-to-speech`, `genai-voice-designer` |
-| Transcribe with timestamps | `elevenlabs-speech-to-text` (or faster-whisper as in `make_vo.py`) |
+| Transcribe with timestamps | free and local: `tools/transcribe.py` (see `subtitles`); paid with diarisation: `elevenlabs-speech-to-text` |
 | Clean a noisy recording | `elevenlabs-voice-isolator` |
 | Change the voice of a take, dub to another language | `elevenlabs-voice-changer`, `elevenlabs-dubbing` |
-| Sounds when Claude finishes or needs you | `agent-sounds` |
+| Sounds when Claude finishes or needs you (not for films) | `agent-sounds` |

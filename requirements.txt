@@ -1,5 +1,6 @@
 numpy>=1.26
 Pillow>=10
 faster-whisper>=1.0
+av>=16,<17            # faster-whisper 1.2 passes an argument PyAV 19 removed; 16.1 tested
 edge-tts>=7.3
 piper-tts>=1.3        # offline voice: TTS_ENGINE=piper
