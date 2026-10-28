@@ -3,13 +3,19 @@
 Claude Code loads these automatically when it runs inside this repo. Start
 with `motionkit`: it explains the film pipeline and routes to the rest.
 
-Only voice, editing, music and sound were taken from the source repos.
+Taken from the source repos: voice, editing, music and sound, plus two
+picture skills (type, grade). `film-fx` and `subtitles` are written for this
+repo's own `lib/fx.js`, `lib/captions.js` and tools.
 
 ## Index
 
 | Area | Skill | What it is for | From |
 |---|---|---|---|
 | Core | [motionkit](motionkit/SKILL.md) | Making, voicing, scoring and exporting a film in this repo; which skill next | new |
+| Picture | [film-fx](film-fx/SKILL.md) | 26 effects and 6 drivers (grain to goo, beat pulse, shake, hit-stop, speed ramps), recipes, export traps; full reference in `references/effects.md` | new |
+| Picture | [subtitles](subtitles/SKILL.md) | In-film captions (pop, karaoke, line), SRT/VTT/ASS, burn-in, free local transcription | new |
+| Picture | [kinetic-typography](kinetic-typography/SKILL.md) | Headline reveals, split-text staggers, lyric and title cards (CSS, GSAP, Remotion recipes) | iart-ai/kinetic-typography-skills |
+| Picture | [color-grading-finishing](color-grading-finishing/SKILL.md) | Correction, shot matching, looks, LUTs, delivery colour for footage | calesthio/generative-media-skills |
 | Voice | [piper-tts](piper-tts/SKILL.md) | Offline, free TTS (Norwegian too), used by `TTS_ENGINE=piper` | new, docs from piper1-gpl |
 | Voice | [elevenlabs-text-to-speech](elevenlabs-text-to-speech/SKILL.md) | ElevenLabs TTS, models, voice settings, streaming | elevenlabs/skills |
 | Voice | [genai-voice-designer](genai-voice-designer/SKILL.md) | Voice design, v3 audio tags, narration direction | AlterLab FC |
@@ -29,7 +35,7 @@ Only voice, editing, music and sound were taken from the source repos.
 | Sound | [audio-mixing-mastering](audio-mixing-mastering/SKILL.md) | Mix, levels, loudness targets, mastering | Gonzolt/claude-skills |
 | Sound | [elevenlabs-sound-effects](elevenlabs-sound-effects/SKILL.md) | Generate a sound effect from text | elevenlabs/skills |
 | Sound | [genai-sound-effects](genai-sound-effects/SKILL.md) | Prompt craft for AI sound effects and ambiences | AlterLab FC |
-| Sound | [agent-sounds](agent-sounds/SKILL.md) | Sounds when Claude Code finishes or needs you | claude-code-hooks + peon-ping |
+| Workflow | [agent-sounds](agent-sounds/SKILL.md) | Sounds when Claude Code finishes or needs you (not for films) | claude-code-hooks + peon-ping |
 
 ## Sources and licences
 
@@ -43,9 +49,13 @@ Only voice, editing, music and sound were taken from the source repos.
 | [PeonPing/peon-ping](https://github.com/PeonPing/peon-ping) | MIT | sound render and playback scripts; left out the packs, adapters, app |
 | [AlterLab-IEU/AlterLab-FC-Skills](https://github.com/AlterLab-IEU/AlterLab-FC-Skills) via [Gonzolt/claude-skills](https://github.com/Gonzolt/claude-skills) | MIT | 3 GenAI audio skills |
 | [Gonzolt/claude-skills](https://github.com/Gonzolt/claude-skills) project set | yours | 6 audio and editing skills |
+| [iart-ai/kinetic-typography-skills](https://github.com/iart-ai/kinetic-typography-skills) | MIT | `kinetic-typography` (with contact-sheet scripts from the Gonzolt/claude-skills copy) |
+| [calesthio/generative-media-skills](https://github.com/calesthio/generative-media-skills) via Gonzolt/claude-skills | MIT | `color-grading-finishing` |
 | [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) | MIT | nothing: it has no voice, editing, music or sound skills |
 
 Every copied folder keeps its upstream `LICENSE` where the source had one.
 Skill names were prefixed (`elevenlabs-`, `genai-`) so they do not collide
-with generic names; the content is unchanged apart from that and the
-`hooks.py` fix noted above.
+with generic names; the content is unchanged apart from that, the `hooks.py`
+fix noted above, and an "In this repo" note at the top of
+`kinetic-typography`, `beat-sync-editing` and `elevenlabs-setup-api-key`
+where the original points at skills or techniques that do not apply here.

@@ -18,12 +18,13 @@ It is an earlier render: the last line differs from the current script.
   <br><sub>Preview without sound. Click it for the mp4 with sound.</sub>
 </p>
 
-Two example films are included:
+Three example films are included:
 
 | Film | What it shows |
 | --- | --- |
 | `lab/nocode` | 29 s, 9:16. Kinetic type cut on every word of a voiceover, with synthesised sound effects on the same cues |
 | `lab/motionlab` | 14 s catalogue of the primitives: masked rise, squash and stretch, fan, blocks, camera whip, slice smear |
+| `lab/fxlab` | 39 s catalogue: every effect in `lib/fx.js` (finish, light, glitch, impact, trails, time remaps, goo, halftone, spotlight, letterbox) and the three caption presets |
 
 ## Requirements
 
@@ -100,6 +101,8 @@ node tools/shot.mjs  --film lab/nocode --at 1.2,13.6,21.7           # single fra
 node tools/strip.mjs --film lab/nocode --from 13.2 --to 14.2 --fps 30   # every frame of one move
 node tools/strip.mjs --film lab/motionlab --from 2.9 --to 3.6 --fps 60 --probe '#word'  # measure the easing
 python3 tools/rhythm.py out/nocode-preview.mp4                      # motion / rest timeline graph
+node tools/subs.mjs --words brands/lab/films/nocode.words.js --srt out/nocode.srt   # subtitles (also --vtt, --ass)
+python tools/transcribe.py take.mp4                                 # word times for any clip (faster-whisper)
 ```
 
 Output goes to `out/` (git-ignored). In the browser preview, the bar at the
@@ -129,7 +132,8 @@ frames and a sheet will usually land on one of them at most.
 | --- | --- |
 | `lib/motion.js` | `E` easing curves by job, closed-form `spring()`, keyframe `track()`, `stagger()`, `speed()`, seeded `noise`/`rand`/`impact`/`drift` |
 | `lib/type.js` | `splitText` (with masks), `charIn`/`charOut`, `squashStretch`, `typewriter`, `scramble`, `countTo` |
-| `lib/fx.js` | one-axis `dirBlur`, outline `echoes`, `slices` smear |
+| `lib/fx.js` | 26 effects as functions of `t` (grain, scanlines, halftone, grades, leaks, flare, glow, shine, spotlight, blurs, trails, RGB split, slice and block glitch, warp, flash, ring, sparks, speed lines, dust, goo, letterbox) and drivers (`beatPulse`, `flicker`, `shake`, `hitStop`, `speedRamp`, `flashCheck`). See the `film-fx` skill |
+| `lib/captions.js` | `chunk()` word times into caption chunks, `makeCaptions`/`captions` in-film captions (pop, karaoke, line) |
 | `lib/transitions.js` | `reveal(layer, shape, p)`: disc, wipe, fan, bars, blocks, inset; `pushThrough` |
 | `lib/rig.js` | `makeRig`, `camera()` from tracks with impacts and handheld drift, `cameraBlur` |
 | `lib/scenes.js` | the scene table: name scenes, never hard-code seconds |
@@ -177,8 +181,8 @@ engine, so switching engines never reuses another engine's audio.
 
 ## Skills
 
-`.claude/skills/` holds Claude Code skills for the voice, editing, music and
-sound side of a film. Claude loads them by itself when it works in this repo;
+`.claude/skills/` holds Claude Code skills for the picture (effects,
+subtitles, type, grade), voice, editing, music and sound side of a film. Claude loads them by itself when it works in this repo;
 start with `motionkit`. The index, sources and licences are in
 [`.claude/skills/README.md`](.claude/skills/README.md).
 
@@ -190,6 +194,7 @@ start with `motionkit`. The index, sources and licences are in
 | edge-tts fails with HTTP 403 | `pip install -U edge-tts` (versions before 7.3 are rejected by the service) |
 | A 0-byte `lineNN.mp3` after a failed TTS call | Delete it. The script reuses existing clips |
 | `whisper could not place the words of ...` | The TTS clip is wrong or truncated: delete that line's mp3 and rerun |
+| `shot.mjs` / export sits for minutes on one frame | A fine pattern (scanlines, a repeating gradient) under a blended layer such as grain. Put it above the grain; see the `film-fx` skill |
 | `window.PK never appeared` | The film threw while loading. The error is printed under "the page reported" |
 | `track keys out of order` | Two keyframes in a `track()` are not in time order, often two words closer together than the move |
 | Ghost of two scenes on a hard cut in a `--blur` export | Put the cut half a frame early (`t >= a - 1/60` at 30 fps) |

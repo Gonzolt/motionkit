@@ -4,6 +4,12 @@ description: This skill should be used when the user asks to "cut to the beat", 
 version: 0.1.0
 ---
 
+> **In this repo (motionkit):** `motion-art-direction`, `animation-principles`,
+> `remotion-video` and `after-effects` mentioned below are not installed here.
+> The "code timeline" hand-off is a motionkit cue table
+> (`films/<film>.cues.js`, see the `motionkit` skill): cut points become named
+> cues, and the same cues drive picture, `film-fx` hits and `make_sfx.py`.
+
 # Beat-Sync Editing (Cuts & Rhythm)
 
 The timeline craft: how clips and beats assemble into a piece that *feels* right. Editing is temporal design — when a cut lands matters as much as what is on screen. This skill turns musical and narrative structure into concrete cut points, transitions, and retimes, expressible in an NLE or as frame numbers in code.

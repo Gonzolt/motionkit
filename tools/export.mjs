@@ -25,9 +25,9 @@
 
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
-import { mkdtemp, rm, mkdir } from 'node:fs/promises';
+import { mkdtemp, rm, mkdir, copyFile, rename } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve, dirname } from 'node:path';
+import { join, resolve, dirname, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { findChrome, parseArgs, chromeFlags, filmUrl, filmWantsGL, startServer, CDP, waitForBrowser } from './browser.mjs';
 
@@ -54,6 +54,13 @@ const SHUTTER = Number(args.shutter ?? 0.5);
 
 const OUT = resolve(args.out ?? join(ROOT, 'out', `${(args.film ?? 'film').replace('/', '-')}.mp4`));
 await mkdir(dirname(OUT), { recursive: true });
+/* The encode is written beside OUT as name.exporting.mp4 and renamed on
+   success. An MP4 is unplayable until ffmpeg writes its index at the very end,
+   so a file under the final name must only ever be a finished one. */
+const PART = join(dirname(OUT), `${basename(OUT, extname(OUT))}.exporting${extname(OUT)}`);
+/* ffmpeg takes no frames for this long -> it has stopped reading; fail loudly
+   instead of waiting for ever (a stalled pipe looks exactly like a slow render). */
+const STALL_MS = Number(args.stall ?? 120) * 1000;
 
 const server = await startServer(ROOT, Number(args.serve ?? 5178));
 const url = args.url ?? filmUrl(server.port, args.film);
@@ -121,7 +128,11 @@ const total = Math.round((to - from) * FPS);
 /* A track, if one was named. It is assumed to start where the film does, so a
    partial export seeks into it by the same amount — otherwise `--from 16`
    would put bar 1 of the music under bar 9 of the picture. */
-const AUDIO = args.audio ? resolve(args.audio) : null;
+/* Read from a private copy: a mix rewritten while the export runs (re-muxing
+   the audio in parallel) otherwise cuts ffmpeg's audio input mid-read, and
+   with -shortest it then stops taking frames and the export hangs. */
+const AUDIO = args.audio ? join(profile, `audio${extname(args.audio)}`) : null;
+if (AUDIO) await copyFile(resolve(args.audio), AUDIO);
 
 const ffmpeg = spawn('ffmpeg', [
   '-y',
@@ -142,11 +153,18 @@ const ffmpeg = spawn('ffmpeg', [
   '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709',
   '-color_range', 'tv',
   '-profile:v', 'high', '-movflags', '+faststart',
-  OUT,
+  PART,
 ], { stdio: ['pipe', 'ignore', 'pipe'] });
 
 let ffmpegErr = '';
 ffmpeg.stderr.on('data', (d) => { ffmpegErr += d; });
+const ffmpegClosed = once(ffmpeg, 'close');
+const fail = async (why) => {
+  ffmpeg.kill(); await cleanup(); await rm(PART, { force: true }).catch(() => {});
+  console.error(`\n${why}\nffmpeg said:\n${ffmpegErr.split('\n').slice(-14).join('\n')}`);
+  process.exit(1);
+};
+const stall = () => new Promise((res) => setTimeout(res, STALL_MS, 'stall'));
 
 console.log(`${total} frames · ${FPS} fps · ${W}x${H} · ${FORMAT}${BLUR > 1 ? ` · ${BLUR}× motion blur, shutter ${SHUTTER}` : ''} → ${OUT}`);
 const started = Date.now();
@@ -160,7 +178,12 @@ for (let i = 0; i < total; i++) {
       format: FORMAT, quality: 100, captureBeyondViewport: false, fromSurface: true,
     });
     const buf = Buffer.from(data, 'base64');
-    if (!ffmpeg.stdin.write(buf)) await once(ffmpeg.stdin, 'drain');
+    if (ffmpeg.exitCode !== null) await fail(`ffmpeg quit at frame ${i + 1} of ${total}.`);
+    if (!ffmpeg.stdin.write(buf)) {
+      const r = await Promise.race([once(ffmpeg.stdin, 'drain'), ffmpegClosed.then(() => 'closed'), stall()]);
+      if (r === 'closed') await fail(`ffmpeg quit at frame ${i + 1} of ${total}.`);
+      if (r === 'stall') await fail(`ffmpeg took no frames for ${STALL_MS / 1000}s at frame ${i + 1} of ${total}: the encode stalled.`);
+    }
   }
 
   if (i % 30 === 0 || i === total - 1) {
@@ -174,11 +197,13 @@ for (let i = 0; i < total; i++) {
 }
 
 ffmpeg.stdin.end();
-const [code] = await once(ffmpeg, 'close');
+const [code] = await ffmpegClosed;
 await cleanup();
 
 if (code !== 0) {
+  await rm(PART, { force: true }).catch(() => {});
   console.error(`\nffmpeg failed (${code}):\n${ffmpegErr.split('\n').slice(-14).join('\n')}`);
   process.exit(1);
 }
+await rename(PART, OUT);
 console.log(`\ndone in ${Math.round((Date.now() - started) / 1000)}s → ${OUT}`);

@@ -1,6 +1,6 @@
 ---
 name: motionkit
-description: Make a film with this repo — kinetic type, transitions, camera rig and motion blur written as render(t), cut to a word-timed voiceover, with sound effects on the same cues and a music bed under it. Use for any request to make, retime, voice, score or export a motionkit film, to swap the voice engine (edge-tts, offline Piper, ElevenLabs), or to decide which of the voice / editing / music / sound skills in this repo to load next.
+description: Make a film with this repo — kinetic type, transitions, camera rig and motion blur written as render(t), cut to a word-timed voiceover, with sound effects on the same cues and a music bed under it. Use for any request to make, retime, voice, score or export a motionkit film, to add effects or captions, to swap the voice engine (edge-tts, offline Piper, ElevenLabs), or to decide which of the picture / voice / editing / music / sound skills in this repo to load next.
 ---
 
 # motionkit
@@ -28,6 +28,8 @@ and motion blur (sub-frame sampling) all go wrong at once.
 4. **Picture.** Build the DOM once, write `render(t)`. Check single moves with
    `node tools/strip.mjs --film <brand>/<film> --from A --to B --fps 30`, the
    whole film with `tools/shot.mjs --sheet 24`.
+   Effects (grain, split, flash, leaks, sparks…) hang off the same cues:
+   `film-fx`. Captions come from the same words.js: `subtitles`.
 5. **Sound.** `make_sfx.py` synthesises effects on the *same* cues, so a thump
    and its camera punch land on the same frame. Then the music bed (below).
 6. **Master and export.** Loudness, then `tools/export.mjs` (preview without
@@ -82,7 +84,9 @@ Cutting picture to its beat: `beat-sync-editing`.
 | Room tone / texture | -20 to -30 dBFS | noticed only when removed |
 
 Master: `ffmpeg -i mix.wav -af loudnorm=I=-14:TP=-1.5:LRA=11 mix.m4a` for
-TikTok/Reels/Shorts. A sting can play, not clip, and still be inaudible when
+TikTok/Reels/Shorts. That is the loud end of the -16 to -14 LUFS social range
+in `audio-mixing-mastering`; i-hate-editing lands talking heads at -15. Pick
+-14 for music-led films, -15/-16 for speech-led. A sting can play, not clip, and still be inaudible when
 the window misses its transient: see `i-hate-editing/rules/sound.md`.
 
 **Check without listening:** run whisper on the final mix and diff it against
@@ -92,6 +96,10 @@ the script. A word that went missing is covered by an effect or the bed.
 
 | Job | Skill |
 |---|---|
+| Effects and polish: grain, glitch, flash, leaks, flare, glow, shine, sparks, shake, hit-stop, slow-mo ramps, grade | `film-fx` (catalogue film: `lab/fxlab`) |
+| Captions in the film, SRT/VTT/ASS, burn-in, transcribe a clip | `subtitles` |
+| Headline and title reveals, lyric videos | `kinetic-typography` (motionkit's own primitives: `lib/type.js`) |
+| Grade footage, match shots, looks | `color-grading-finishing` |
 | Raw talking-head footage to a finished, captioned package | `i-hate-editing` |
 | Cut rhythm, J/L cuts, speed ramps, cutting to BPM | `beat-sync-editing` |
 | Structure, montage, pacing of a whole piece | `editing-montage` |
@@ -103,7 +111,7 @@ the script. A word that went missing is covered by an effect or the bed.
 | Generate music | `elevenlabs-music`, `genai-music-producer` |
 | Offline voice | `piper-tts` |
 | Cloud voice, voice design, audio tags | `elevenlabs-text-to-speech`, `genai-voice-designer` |
-| Transcribe with timestamps | `elevenlabs-speech-to-text` (or faster-whisper as in `make_vo.py`) |
+| Transcribe with timestamps | free and local: `tools/transcribe.py` (see `subtitles`); paid with diarisation: `elevenlabs-speech-to-text` |
 | Clean a noisy recording | `elevenlabs-voice-isolator` |
 | Change the voice of a take, dub to another language | `elevenlabs-voice-changer`, `elevenlabs-dubbing` |
-| Sounds when Claude finishes or needs you | `agent-sounds` |
+| Sounds when Claude finishes or needs you (not for films) | `agent-sounds` |
