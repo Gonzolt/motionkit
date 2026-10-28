@@ -5,6 +5,10 @@ license: MIT
 compatibility: Requires internet access to elevenlabs.io and api.elevenlabs.io, and Node.js for npx (or the ElevenLabs CLI installed another way).
 ---
 
+> **In this repo (motionkit):** the `onboarding` skill mentioned below was not
+> copied. Free alternatives that need no key: `TTS_ENGINE=edge` or `piper`
+> (`piper-tts`), and `tools/transcribe.py` for speech-to-text (`subtitles`).
+
 # ElevenLabs API Key Setup
 
 For a key the user already has, or one that stopped working. For adding

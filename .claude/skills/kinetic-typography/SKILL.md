@@ -4,6 +4,17 @@ description: This skill should be used when the user asks to "animate a headline
 version: 0.1.0
 ---
 
+> **In this repo (motionkit):** use the reveal *ideas* below, not the CSS /
+> GSAP / Framer code. A motionkit film draws every frame from `t`, and
+> `npm run lint` rejects `@keyframes`, `transition:` and `animation:`.
+> Translate: split text → `splitText(el, str, { mask: true })`; staggered
+> reveal → `charIn(chars, t, { start, each, dur, ease })` / `charOut`;
+> squash → `squashStretch`; typing → `typewriter`; decode → `scramble`;
+> counters → `countTo` (all `lib/type.js`); weight/width morph →
+> `css(el, 'font-variation-settings', …)` from a `tween()`; blur-in →
+> `dirBlur` or `css(el, 'filter', blur(…))` set per frame. Effects on type:
+> `film-fx`. Captions: `subtitles`. See `lab/motionlab` scene `type`.
+
 # Typography in Motion
 
 Animate text expressively: splitting copy into lines/words/characters, staggering reveals, masking, blurring, morphing weight, and running text along a path. Produces runnable code for the web (CSS, GSAP, Framer Motion) and video (Remotion), plus an After Effects expression approach.

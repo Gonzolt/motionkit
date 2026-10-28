@@ -84,7 +84,9 @@ Cutting picture to its beat: `beat-sync-editing`.
 | Room tone / texture | -20 to -30 dBFS | noticed only when removed |
 
 Master: `ffmpeg -i mix.wav -af loudnorm=I=-14:TP=-1.5:LRA=11 mix.m4a` for
-TikTok/Reels/Shorts. A sting can play, not clip, and still be inaudible when
+TikTok/Reels/Shorts. That is the loud end of the -16 to -14 LUFS social range
+in `audio-mixing-mastering`; i-hate-editing lands talking heads at -15. Pick
+-14 for music-led films, -15/-16 for speech-led. A sting can play, not clip, and still be inaudible when
 the window misses its transient: see `i-hate-editing/rules/sound.md`.
 
 **Check without listening:** run whisper on the final mix and diff it against
@@ -94,7 +96,7 @@ the script. A word that went missing is covered by an effect or the bed.
 
 | Job | Skill |
 |---|---|
-| Effects: grain, RGB split, flash, leaks, flare, warp, sparks, speed lines, grade | `film-fx` (catalogue film: `lab/fxlab`) |
+| Effects and polish: grain, glitch, flash, leaks, flare, glow, shine, sparks, shake, hit-stop, slow-mo ramps, grade | `film-fx` (catalogue film: `lab/fxlab`) |
 | Captions in the film, SRT/VTT/ASS, burn-in, transcribe a clip | `subtitles` |
 | Headline and title reveals, lyric videos | `kinetic-typography` (motionkit's own primitives: `lib/type.js`) |
 | Grade footage, match shots, looks | `color-grading-finishing` |

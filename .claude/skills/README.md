@@ -12,7 +12,7 @@ repo's own `lib/fx.js`, `lib/captions.js` and tools.
 | Area | Skill | What it is for | From |
 |---|---|---|---|
 | Core | [motionkit](motionkit/SKILL.md) | Making, voicing, scoring and exporting a film in this repo; which skill next | new |
-| Picture | [film-fx](film-fx/SKILL.md) | Grain, RGB split, flash, leaks, flares, zoom blur, warps, rings, sparks, speed lines, grades; cue-driven, export-safe | new |
+| Picture | [film-fx](film-fx/SKILL.md) | 26 effects and 6 drivers (grain to goo, beat pulse, shake, hit-stop, speed ramps), recipes, export traps; full reference in `references/effects.md` | new |
 | Picture | [subtitles](subtitles/SKILL.md) | In-film captions (pop, karaoke, line), SRT/VTT/ASS, burn-in, free local transcription | new |
 | Picture | [kinetic-typography](kinetic-typography/SKILL.md) | Headline reveals, split-text staggers, lyric and title cards (CSS, GSAP, Remotion recipes) | iart-ai/kinetic-typography-skills |
 | Picture | [color-grading-finishing](color-grading-finishing/SKILL.md) | Correction, shot matching, looks, LUTs, delivery colour for footage | calesthio/generative-media-skills |
@@ -55,5 +55,7 @@ repo's own `lib/fx.js`, `lib/captions.js` and tools.
 
 Every copied folder keeps its upstream `LICENSE` where the source had one.
 Skill names were prefixed (`elevenlabs-`, `genai-`) so they do not collide
-with generic names; the content is unchanged apart from that and the
-`hooks.py` fix noted above.
+with generic names; the content is unchanged apart from that, the `hooks.py`
+fix noted above, and an "In this repo" note at the top of
+`kinetic-typography`, `beat-sync-editing` and `elevenlabs-setup-api-key`
+where the original points at skills or techniques that do not apply here.

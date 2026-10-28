@@ -24,7 +24,7 @@ Three example films are included:
 | --- | --- |
 | `lab/nocode` | 29 s, 9:16. Kinetic type cut on every word of a voiceover, with synthesised sound effects on the same cues |
 | `lab/motionlab` | 14 s catalogue of the primitives: masked rise, squash and stretch, fan, blocks, camera whip, slice smear |
-| `lab/fxlab` | 23 s catalogue of the effects in `lib/fx.js` (grain, split, leaks, flare, zoom blur, warp, ring, sparks, speed lines, grades) and the three caption presets |
+| `lab/fxlab` | 39 s catalogue: every effect in `lib/fx.js` (finish, light, glitch, impact, trails, time remaps, goo, halftone, spotlight, letterbox) and the three caption presets |
 
 ## Requirements
 
@@ -132,7 +132,7 @@ frames and a sheet will usually land on one of them at most.
 | --- | --- |
 | `lib/motion.js` | `E` easing curves by job, closed-form `spring()`, keyframe `track()`, `stagger()`, `speed()`, seeded `noise`/`rand`/`impact`/`drift` |
 | `lib/type.js` | `splitText` (with masks), `charIn`/`charOut`, `squashStretch`, `typewriter`, `scramble`, `countTo` |
-| `lib/fx.js` | `dirBlur`, `echoes`, `slices`, and the finish: `grain`, vignette, `scanlines`, `rgbSplit`, flash (`flashAt`, `flashCheck`), `leaks`, `flare`, `zoomBlur`, `warp`, `ring`, `sparks`, `speedLines`, grades and duotone |
+| `lib/fx.js` | 26 effects as functions of `t` (grain, scanlines, halftone, grades, leaks, flare, glow, shine, spotlight, blurs, trails, RGB split, slice and block glitch, warp, flash, ring, sparks, speed lines, dust, goo, letterbox) and drivers (`beatPulse`, `flicker`, `shake`, `hitStop`, `speedRamp`, `flashCheck`). See the `film-fx` skill |
 | `lib/captions.js` | `chunk()` word times into caption chunks, `makeCaptions`/`captions` in-film captions (pop, karaoke, line) |
 | `lib/transitions.js` | `reveal(layer, shape, p)`: disc, wipe, fan, bars, blocks, inset; `pushThrough` |
 | `lib/rig.js` | `makeRig`, `camera()` from tracks with impacts and handheld drift, `cameraBlur` |
