@@ -101,6 +101,7 @@ the script. A word that went missing is covered by an effect or the bed.
 | Carousel / swipe posts | `carousel` |
 | One topic → video, carousel and post copy for every platform | `repurpose` |
 | Effects and polish: grain, glitch, flash, leaks, flare, glow, shine, sparks, shake, hit-stop, slow-mo ramps, grade | `film-fx` (catalogue film: `lab/fxlab`) |
+| Gaming / Valorant edit cut to a song: lyric words, text behind the gun, card portals, bursts; analysing reference edits | `frag-edit` (catalogue film: `lab/fraglab`) |
 | Captions in the film, SRT/VTT/ASS, burn-in, transcribe a clip | `subtitles` |
 | Headline and title reveals, lyric videos | `kinetic-typography` (motionkit's own primitives: `lib/type.js`) |
 | Grade footage, match shots, looks | `color-grading-finishing` |

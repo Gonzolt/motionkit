@@ -4,7 +4,7 @@ Claude Code loads these automatically when it runs inside this repo. Start
 with `motionkit`: it explains the film pipeline and routes to the rest.
 
 Taken from the source repos: voice, editing, music and sound, plus two
-picture skills (type, grade). `film-fx`, `subtitles` and the four Social
+picture skills (type, grade). `film-fx`, `subtitles`, `frag-edit` and the four Social
 skills are written for this repo's own `lib/` and `tools/`. The Social set
 takes its shape (shared brand profile, hook lab, carousel builder, repurpose,
 variant ids fed by results) from ideas in public social-media skill packs; no
@@ -17,6 +17,7 @@ text or code was copied from them.
 | Core | [motionkit](motionkit/SKILL.md) | Making, voicing, scoring and exporting a film in this repo; which skill next | new |
 | Picture | [film-fx](film-fx/SKILL.md) | 26 effects and 6 drivers (grain to goo, beat pulse, shake, hit-stop, speed ramps), recipes, export traps; full reference in `references/effects.md` | new |
 | Picture | [subtitles](subtitles/SKILL.md) | In-film captions (pop, karaoke, line), SRT/VTT/ASS, burn-in, free local transcription | new |
+| Picture | [frag-edit](frag-edit/SKILL.md) | Gaming / Valorant TikTok edits: lyric words, syllable builds, text behind the gun, card portals, repetition bursts, edge ink; reference scan with `tools/refscan.py`; six references measured in `references/` | new |
 | Social | [social-promo](social-promo/SKILL.md) | Promo / ad videos from a brief: structure, product photos, badges, price, end card, safe zones, feed crops, variants, results loop | new |
 | Social | [hook-lab](hook-lab/SKILL.md) | First 2–3 s: hook angles, scoring rubric, four-track spec, alternative openings, hook tests | new |
 | Social | [carousel](carousel/SKILL.md) | Instagram / LinkedIn carousels as PNGs in the brand's look, from a deck JSON | new |

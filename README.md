@@ -18,7 +18,7 @@ It is an earlier render: the last line differs from the current script.
   <br><sub>Preview without sound. Click it for the mp4 with sound.</sub>
 </p>
 
-Four example films are included:
+Five example films are included:
 
 | Film | What it shows |
 | --- | --- |
@@ -26,6 +26,7 @@ Four example films are included:
 | `lab/motionlab` | 14 s catalogue of the primitives: masked rise, squash and stretch, fan, blocks, camera whip, slice smear |
 | `lab/promo` | 15 s social promo read from `campaigns/launch/brief.json`: 3 hooks × 2 messages × 2 CTAs, picked with `?v=H2-M1-C1` |
 | `lab/fxlab` | 39 s catalogue: every effect in `lib/fx.js` (finish, light, glitch, impact, trails, time remaps, goo, halftone, spotlight, letterbox) and the three caption presets |
+| `lab/fraglab` | 17 s, 16:9 catalogue of `lib/frag.js`, the gaming-edit pieces: lyric word with syllable build and accent, text behind the gun, scribble swap, card portal, repetition burst, edge ink. Shoot with `--width 1920 --height 1080` |
 
 ## Requirements
 
@@ -104,6 +105,7 @@ node tools/strip.mjs --film lab/motionlab --from 2.9 --to 3.6 --fps 60 --probe '
 python3 tools/rhythm.py out/nocode-preview.mp4                      # motion / rest timeline graph
 node tools/subs.mjs --words brands/lab/films/nocode.words.js --srt out/nocode.srt   # subtitles (also --vtt, --ass)
 python tools/transcribe.py take.mp4                                 # word times for any clip (faster-whisper)
+python tools/refscan.py ref.mov --strip 12                          # take a reference edit apart: tempo, cuts, flashes, B&W, sheets
 node tools/variants.mjs --film lab/promo --brief campaigns/launch/brief.json --shots   # every hook, side by side
 node tools/carousel.mjs --deck campaigns/launch/carousel.json      # carousel PNGs in the brand's look
 node tools/copycheck.mjs campaigns/launch/posts.json               # post copy vs platform limits and brand voice
@@ -137,6 +139,7 @@ frames and a sheet will usually land on one of them at most.
 | `lib/motion.js` | `E` easing curves by job, closed-form `spring()`, keyframe `track()`, `stagger()`, `speed()`, seeded `noise`/`rand`/`impact`/`drift` |
 | `lib/type.js` | `splitText` (with masks), `charIn`/`charOut`, `squashStretch`, `typewriter`, `scramble`, `countTo` |
 | `lib/fx.js` | 26 effects as functions of `t` (grain, scanlines, halftone, grades, leaks, flare, glow, shine, spotlight, blurs, trails, RGB split, slice and block glitch, warp, flash, ring, sparks, speed lines, dust, goo, letterbox) and drivers (`beatPulse`, `flicker`, `shake`, `hitStop`, `speedRamp`, `flashCheck`). See the `film-fx` skill |
+| `lib/frag.js` | gaming-edit pieces: `wordAt`/`grow` lyric words, `makeLyric`/`lyric`, `clipTo`/`polyAt` text behind the gun, `scribble`, `card` portal, `stutter`/`segAt` repetition burst, `edgeInk`. See the `frag-edit` skill |
 | `lib/promo.js` | social pieces: product photo + `kenBurns`, `badge`, `price`, `stars`, `lowerThird`, `sticker`, `endCard`; platform `SAFE` zones, feed `CROPS`, `variant()` |
 | `lib/captions.js` | `chunk()` word times into caption chunks, `makeCaptions`/`captions` in-film captions (pop, karaoke, line) |
 | `lib/transitions.js` | `reveal(layer, shape, p)`: disc, wipe, fan, bars, blocks, inset; `pushThrough` |
