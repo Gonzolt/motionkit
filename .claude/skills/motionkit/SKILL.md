@@ -1,6 +1,6 @@
 ---
 name: motionkit
-description: Make a film with this repo — kinetic type, transitions, camera rig and motion blur written as render(t), cut to a word-timed voiceover, with sound effects on the same cues and a music bed under it. Use for any request to make, retime, voice, score or export a motionkit film, to add effects or captions, to swap the voice engine (edge-tts, offline Piper, ElevenLabs), or to decide which of the picture / voice / editing / music / sound skills in this repo to load next.
+description: Make a film with this repo — kinetic type, transitions, camera rig and motion blur written as render(t), cut to a word-timed voiceover, with sound effects on the same cues and a music bed under it. Use for any request to make, retime, voice, score or export a motionkit film, to add effects or captions, to make social promos, carousels or post copy, to swap the voice engine (edge-tts, offline Piper, ElevenLabs), or to decide which of the picture / voice / editing / music / sound skills in this repo to load next.
 ---
 
 # motionkit
@@ -96,6 +96,10 @@ the script. A word that went missing is covered by an effect or the bed.
 
 | Job | Skill |
 |---|---|
+| Promo / ad for a product, launch video, variants to test | `social-promo` (worked example: `lab/promo` + `campaigns/launch/`) |
+| The first 2–3 seconds, hook ideas and hook tests | `hook-lab` |
+| Carousel / swipe posts | `carousel` |
+| One topic → video, carousel and post copy for every platform | `repurpose` |
 | Effects and polish: grain, glitch, flash, leaks, flare, glow, shine, sparks, shake, hit-stop, slow-mo ramps, grade | `film-fx` (catalogue film: `lab/fxlab`) |
 | Captions in the film, SRT/VTT/ASS, burn-in, transcribe a clip | `subtitles` |
 | Headline and title reveals, lyric videos | `kinetic-typography` (motionkit's own primitives: `lib/type.js`) |

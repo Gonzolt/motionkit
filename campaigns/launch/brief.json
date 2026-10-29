@@ -1,0 +1,45 @@
+{
+  "_": "One campaign = one brief. Hooks, messages and CTAs carry ids; a render is one combination (H2-M1-C1). Hook Lab fills `hooks`, Repurpose reads the whole brief, results come back into `results`.",
+  "brand": "lab",
+  "product": "motionkit",
+  "audience": "Developers who post short videos and hate timeline editors",
+  "objective": "GitHub stars from people who can actually use it",
+  "message": "Make short videos in code: every frame is a function of time.",
+  "proof": [
+    "Public repo, free, no paid tier",
+    "lab/nocode: a 29 s vertical film, picture and sound cut to one voiceover",
+    "26 effects and word-synced captions, all scrub-exact"
+  ],
+  "action": "Star the repo",
+  "platforms": ["tiktok", "reels", "shorts", "instagram-carousel", "linkedin", "x"],
+  "length_s": 15,
+  "hooks": [
+    {
+      "id": "H1", "angle": "contrarian", "formula": "Stop doing X",
+      "onscreen": "STOP EDITING VIDEOS", "vo": "Stop editing videos.",
+      "visual": "Timeline clips stack up, then all get struck out at once",
+      "sound": "tape-stop on the strike", "score": 4.2
+    },
+    {
+      "id": "H2", "angle": "demo-first", "formula": "Show the result before the claim",
+      "onscreen": "THIS VIDEO IS CODE", "vo": "This video is code.",
+      "visual": "The finished frame first, then it slides aside to reveal the render(t) that draws it",
+      "sound": "whoosh on the slide", "score": 4.5
+    },
+    {
+      "id": "H3", "angle": "number", "formula": "Number + payoff",
+      "onscreen": "0 TIMELINES. 1 FUNCTION.", "vo": "Zero timelines. One function.",
+      "visual": "Counter slams 0, then 1, word by word",
+      "sound": "two hits on the numbers", "score": 3.9
+    }
+  ],
+  "messages": [
+    { "id": "M1", "line": "No After Effects. No video model.", "proof": "no After Effects" },
+    { "id": "M2", "line": "Free. Open source. Frame-exact.", "proof": "free and open source" }
+  ],
+  "ctas": [
+    { "id": "C1", "button": "STAR IT ON GITHUB", "sticker": "LINK IN BIO" },
+    { "id": "C2", "button": "TRY THE DEMO FILM", "sticker": "LINK IN BIO" }
+  ],
+  "results": []
+}

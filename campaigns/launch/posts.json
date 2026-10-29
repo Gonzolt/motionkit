@@ -1,0 +1,43 @@
+{
+  "_": "Post copy from the launch brief (Repurpose). Check: node tools/copycheck.mjs campaigns/launch/posts.json",
+  "brand": "lab",
+  "posts": [
+    {
+      "platform": "tiktok",
+      "video": "promo H2-M1-C1",
+      "caption": "This video is code. Every frame is render(t). Repo in bio.",
+      "hashtags": ["#creativecoding", "#motiondesign", "#javascript"]
+    },
+    {
+      "platform": "reels",
+      "video": "promo H2-M2-C1",
+      "caption": "This video is code.\n\nNo timeline, no keyframes panel: one function draws every frame, and the voiceover's word times cut the picture, the sound and the captions.\n\nFree and open source: github.com/Gonzolt/motionkit",
+      "hashtags": ["#creativecoding", "#motiondesign", "#webdev"]
+    },
+    {
+      "platform": "instagram-carousel",
+      "carousel": "carousel.json",
+      "caption": "Stop editing videos. Write them.\n\nSwipe for how a motionkit film works, then make one: github.com/Gonzolt/motionkit",
+      "hashtags": ["#creativecoding", "#motiondesign"]
+    },
+    {
+      "platform": "linkedin",
+      "text": "I stopped editing short videos and started writing them.\n\nmotionkit is a small open-source kit: a film is an HTML page plus one function, render(t), that sets every property from the time. Headless Chromium steps through it frame by frame and ffmpeg encodes it.\n\nWhat that buys you:\n- Scrubbing and exports are frame-exact\n- The voiceover's word times drive cuts, sound effects and captions\n- One brief renders every hook and ad variant\n\nFree: github.com/Gonzolt/motionkit",
+      "hashtags": ["#opensource", "#javascript"]
+    },
+    {
+      "platform": "x",
+      "thread": [
+        "I stopped editing short videos and started writing them. A film is an HTML page plus render(t). Every frame is a function of time.",
+        "The voiceover's word times are the timeline: they cut the picture, place the sound effects and time the captions. Re-record the voice and everything re-times.",
+        "26 effects, word-synced captions, carousels and ad variants from one brief. Free and open source: github.com/Gonzolt/motionkit"
+      ]
+    },
+    {
+      "platform": "youtube-shorts",
+      "video": "promo H3-M1-C2",
+      "title": "This video is code (0 timelines, 1 function)",
+      "description": "Made with motionkit, a free open-source kit for writing short videos in code: github.com/Gonzolt/motionkit"
+    }
+  ]
+}

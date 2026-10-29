@@ -4,8 +4,11 @@ Claude Code loads these automatically when it runs inside this repo. Start
 with `motionkit`: it explains the film pipeline and routes to the rest.
 
 Taken from the source repos: voice, editing, music and sound, plus two
-picture skills (type, grade). `film-fx` and `subtitles` are written for this
-repo's own `lib/fx.js`, `lib/captions.js` and tools.
+picture skills (type, grade). `film-fx`, `subtitles` and the four Social
+skills are written for this repo's own `lib/` and `tools/`. The Social set
+takes its shape (shared brand profile, hook lab, carousel builder, repurpose,
+variant ids fed by results) from ideas in public social-media skill packs; no
+text or code was copied from them.
 
 ## Index
 
@@ -14,6 +17,10 @@ repo's own `lib/fx.js`, `lib/captions.js` and tools.
 | Core | [motionkit](motionkit/SKILL.md) | Making, voicing, scoring and exporting a film in this repo; which skill next | new |
 | Picture | [film-fx](film-fx/SKILL.md) | 26 effects and 6 drivers (grain to goo, beat pulse, shake, hit-stop, speed ramps), recipes, export traps; full reference in `references/effects.md` | new |
 | Picture | [subtitles](subtitles/SKILL.md) | In-film captions (pop, karaoke, line), SRT/VTT/ASS, burn-in, free local transcription | new |
+| Social | [social-promo](social-promo/SKILL.md) | Promo / ad videos from a brief: structure, product photos, badges, price, end card, safe zones, feed crops, variants, results loop | new |
+| Social | [hook-lab](hook-lab/SKILL.md) | First 2–3 s: hook angles, scoring rubric, four-track spec, alternative openings, hook tests | new |
+| Social | [carousel](carousel/SKILL.md) | Instagram / LinkedIn carousels as PNGs in the brand's look, from a deck JSON | new |
+| Social | [repurpose](repurpose/SKILL.md) | One source → brief, video variants, carousel and checked post copy per platform | new |
 | Picture | [kinetic-typography](kinetic-typography/SKILL.md) | Headline reveals, split-text staggers, lyric and title cards (CSS, GSAP, Remotion recipes) | iart-ai/kinetic-typography-skills |
 | Picture | [color-grading-finishing](color-grading-finishing/SKILL.md) | Correction, shot matching, looks, LUTs, delivery colour for footage | calesthio/generative-media-skills |
 | Voice | [piper-tts](piper-tts/SKILL.md) | Offline, free TTS (Norwegian too), used by `TTS_ENGINE=piper` | new, docs from piper1-gpl |
