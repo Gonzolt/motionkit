@@ -18,12 +18,13 @@ It is an earlier render: the last line differs from the current script.
   <br><sub>Preview without sound. Click it for the mp4 with sound.</sub>
 </p>
 
-Three example films are included:
+Four example films are included:
 
 | Film | What it shows |
 | --- | --- |
 | `lab/nocode` | 29 s, 9:16. Kinetic type cut on every word of a voiceover, with synthesised sound effects on the same cues |
 | `lab/motionlab` | 14 s catalogue of the primitives: masked rise, squash and stretch, fan, blocks, camera whip, slice smear |
+| `lab/promo` | 15 s social promo read from `campaigns/launch/brief.json`: 3 hooks × 2 messages × 2 CTAs, picked with `?v=H2-M1-C1` |
 | `lab/fxlab` | 39 s catalogue: every effect in `lib/fx.js` (finish, light, glitch, impact, trails, time remaps, goo, halftone, spotlight, letterbox) and the three caption presets |
 
 ## Requirements
@@ -103,6 +104,9 @@ node tools/strip.mjs --film lab/motionlab --from 2.9 --to 3.6 --fps 60 --probe '
 python3 tools/rhythm.py out/nocode-preview.mp4                      # motion / rest timeline graph
 node tools/subs.mjs --words brands/lab/films/nocode.words.js --srt out/nocode.srt   # subtitles (also --vtt, --ass)
 python tools/transcribe.py take.mp4                                 # word times for any clip (faster-whisper)
+node tools/variants.mjs --film lab/promo --brief campaigns/launch/brief.json --shots   # every hook, side by side
+node tools/carousel.mjs --deck campaigns/launch/carousel.json      # carousel PNGs in the brand's look
+node tools/copycheck.mjs campaigns/launch/posts.json               # post copy vs platform limits and brand voice
 ```
 
 Output goes to `out/` (git-ignored). In the browser preview, the bar at the
@@ -133,6 +137,7 @@ frames and a sheet will usually land on one of them at most.
 | `lib/motion.js` | `E` easing curves by job, closed-form `spring()`, keyframe `track()`, `stagger()`, `speed()`, seeded `noise`/`rand`/`impact`/`drift` |
 | `lib/type.js` | `splitText` (with masks), `charIn`/`charOut`, `squashStretch`, `typewriter`, `scramble`, `countTo` |
 | `lib/fx.js` | 26 effects as functions of `t` (grain, scanlines, halftone, grades, leaks, flare, glow, shine, spotlight, blurs, trails, RGB split, slice and block glitch, warp, flash, ring, sparks, speed lines, dust, goo, letterbox) and drivers (`beatPulse`, `flicker`, `shake`, `hitStop`, `speedRamp`, `flashCheck`). See the `film-fx` skill |
+| `lib/promo.js` | social pieces: product photo + `kenBurns`, `badge`, `price`, `stars`, `lowerThird`, `sticker`, `endCard`; platform `SAFE` zones, feed `CROPS`, `variant()` |
 | `lib/captions.js` | `chunk()` word times into caption chunks, `makeCaptions`/`captions` in-film captions (pop, karaoke, line) |
 | `lib/transitions.js` | `reveal(layer, shape, p)`: disc, wipe, fan, bars, blocks, inset; `pushThrough` |
 | `lib/rig.js` | `makeRig`, `camera()` from tracks with impacts and handheld drift, `cameraBlur` |
@@ -182,7 +187,8 @@ engine, so switching engines never reuses another engine's audio.
 ## Skills
 
 `.claude/skills/` holds Claude Code skills for the picture (effects,
-subtitles, type, grade), voice, editing, music and sound side of a film. Claude loads them by itself when it works in this repo;
+subtitles, type, grade), social (promos, hooks, carousels, repurposing),
+voice, editing, music and sound side of a film. Claude loads them by itself when it works in this repo;
 start with `motionkit`. The index, sources and licences are in
 [`.claude/skills/README.md`](.claude/skills/README.md).
 

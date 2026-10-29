@@ -1,0 +1,14 @@
+{
+  "_": "Carousel from the launch brief (Repurpose). Layouts: cover, point, list, stat, quote, cta, image. Render: node tools/carousel.mjs --deck campaigns/launch/carousel.json",
+  "brand": "lab",
+  "size": "1080x1350",
+  "handle": "github.com/Gonzolt/motionkit",
+  "slides": [
+    { "type": "cover", "kicker": "MOTIONKIT", "title": "Stop editing videos. Write them.", "sub": "Short vertical films where every frame is a function of time." },
+    { "type": "point", "n": 1, "title": "A film is a page and one function", "body": "render(t) sets every property from t. No timeline, no keyframes panel." },
+    { "type": "point", "n": 2, "title": "Cut to the words", "body": "The voiceover's word times drive the cuts, the sound effects and the captions." },
+    { "type": "stat", "value": "26", "label": "effects, all frame-exact", "note": "grain, glitch, leaks, sparks, shine, goo…" },
+    { "type": "list", "title": "What you get", "items": ["Word-synced captions + SRT", "Free voices, Norwegian too", "Hook and ad variants from one brief", "Exports with headless Chromium"] },
+    { "type": "cta", "title": "Free and open source", "button": "STAR IT ON GITHUB", "sub": "github.com/Gonzolt/motionkit" }
+  ]
+}

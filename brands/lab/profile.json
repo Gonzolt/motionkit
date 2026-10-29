@@ -1,0 +1,22 @@
+{
+  "_": "Brand profile: who we talk to and how. theme.js owns the LOOK; this owns the VOICE. Films, carousels and post copy all read it, so one campaign speaks with one voice.",
+  "name": "motionkit",
+  "audience": "Developers and solo creators who post short videos and hate timeline editors; comfortable with code, short on time and money.",
+  "voice": {
+    "tone": ["plain", "confident", "a bit dry"],
+    "do": ["short sentences", "show the thing working", "concrete numbers", "name the tool you replace"],
+    "dont": ["hype words (revolutionary, game-changing, insane)", "claims we cannot show", "more than one exclamation mark per post", "emoji walls"],
+    "words_avoid": ["leverage", "unlock", "seamless", "AI-powered"]
+  },
+  "handles": { "github": "Gonzolt/motionkit", "tiktok": "@motionkit", "instagram": "@motionkit" },
+  "hashtags": ["#motiondesign", "#creativecoding", "#javascript", "#videoediting"],
+  "cta_default": "Star it on GitHub",
+  "claims": {
+    "_": "Only claims a viewer could check. Each needs its proof here before it goes on screen.",
+    "free and open source": "public repo, no paid tier",
+    "no After Effects": "films are HTML + render(t), exported with headless Chromium",
+    "frame-exact": "every frame is a pure function of t"
+  },
+  "palette": { "bg": "ink", "fg": "bone", "accent": "signal", "accent2": "ember", "cool": "cobalt", "muted": "mute", "panel": "panel" },
+  "type": { "display": "huge", "head": "big", "body": "line", "label": "label" }
+}
