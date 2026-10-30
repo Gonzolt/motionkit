@@ -101,6 +101,10 @@ node tools/shot.mjs  --film lab/nocode --sheet 24 --cols 6          # contact sh
 node tools/shot.mjs  --film lab/nocode --at 1.2,13.6,21.7           # single frames
 node tools/strip.mjs --film lab/nocode --from 13.2 --to 14.2 --fps 30   # every frame of one move
 node tools/strip.mjs --film lab/motionlab --from 2.9 --to 3.6 --fps 60 --probe '#word'  # measure the easing
+node tools/onion.mjs --film lab/motionlab --range 2.5..3.3 --n 8        # one move's path as onion skin
+node tools/framelint.mjs --film lab/nocode                          # clipped/off-frame/overlapping text, missing fonts and assets
+node tools/snapshot.mjs --film lab/nocode --update                  # approve frames once …
+node tools/snapshot.mjs --film lab/nocode                           # … then diff them after every change
 python3 tools/rhythm.py out/nocode-preview.mp4                      # motion / rest timeline graph
 node tools/subs.mjs --words brands/lab/films/nocode.words.js --srt out/nocode.srt   # subtitles (also --vtt, --ass)
 python tools/transcribe.py take.mp4                                 # word times for any clip (faster-whisper)
@@ -108,6 +112,11 @@ node tools/variants.mjs --film lab/promo --brief campaigns/launch/brief.json --s
 node tools/carousel.mjs --deck campaigns/launch/carousel.json      # carousel PNGs in the brand's look
 node tools/copycheck.mjs campaigns/launch/posts.json               # post copy vs platform limits and brand voice
 ```
+
+`shot`, `strip`, `lint`, `framelint`, `snapshot` and `onion` take `--json`. Each then prints
+one result object on stdout, or `{"error":{"code","message"}}` with exit 1, so an
+agent parses one line instead of scraping logs (`tools/report.mjs`). `framelint`,
+`snapshot` and `onion` follow Kinetograph's `lint`, `snapshot` and `onion`.
 
 Output goes to `out/` (git-ignored). In the browser preview, the bar at the
 bottom plays, scrubs and loops. The shaded overlay marks where TikTok and Reels

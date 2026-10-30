@@ -5,6 +5,7 @@
  *   node tools/shot.mjs --film lab/nocode --sheet 12
  *   node tools/shot.mjs --film lab/nocode --scenes      # one per scene
  *   node tools/shot.mjs --film lab/nocode --safe-zone   # social UI guide
+ *   node tools/shot.mjs --film lab/nocode --scenes --json  # one JSON result (see tools/report.mjs)
  *
  * Same machinery as the export, so what you look at is what will encode. Do
  * NOT use a browser-preview screenshot tool for this: it wedges after a few
@@ -22,14 +23,15 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { parseArgs, filmUrl, filmWantsGL, startServer, withPage, waitForFilm } from './browser.mjs';
+import { reporter, assertFilm } from './report.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = parseArgs(process.argv.slice(2));
+const rep = reporter(args);
 
-if (!args.film && !args.url) {
-  console.error('need --film <brand>/<name> (or a raw --url)');
-  process.exit(2);
-}
+if (!args.film && !args.url) rep.fail('bad-film-name', 'need --film <brand>/<name> (or a raw --url)', 2);
+if (args.film) await assertFilm(ROOT, args.film, rep);
+let sheetFile = null, shots = [];
 
 const PORT = Number(args.port ?? 9355);
 const W = Number(args.width ?? 1080), H = Number(args.height ?? 1920);
@@ -72,7 +74,7 @@ try {
       const name = join(OUT, `${tag}.png`);
       await writeFile(name, Buffer.from(data, 'base64'));
       files.push({ name, t, label: labels?.[i] });
-      console.log(`${t.toFixed(2)}s  ${name}`);
+      rep.log(`${t.toFixed(2)}s  ${name}`);
     }
 
     /* The contact sheet. Reading eight full-size 1080x1920 PNGs one at a time
@@ -97,10 +99,15 @@ try {
         `xstack=inputs=${files.length}:layout=${layout}:fill=black[out]`;
       const r = spawnSync('ffmpeg', ['-y', ...inputs, '-filter_complex', filter, '-map', '[out]', sheet],
         { encoding: 'utf8' });
-      if (r.status === 0) console.log(`\nsheet (${cols}x${rows}): ${sheet}`);
-      else console.error(`\ncontact sheet failed; the individual frames are fine.\n${r.stderr.split('\n').slice(-6).join('\n')}`);
+      if (r.status === 0) { sheetFile = sheet; rep.log(`\nsheet (${cols}x${rows}): ${sheet}`); }
+      // No ffmpeg on PATH leaves r.error set and r.stderr undefined: say that, don't crash on it.
+      else rep.warn(`\ncontact sheet failed; the individual frames are fine.\n${
+        r.error ? `ffmpeg did not run (${r.error.code ?? r.error.message})` : r.stderr.split('\n').slice(-6).join('\n')}`);
     }
+    shots = files;
   });
 } finally {
   server.close();
 }
+rep.done({ film: args.film ?? null, url: args.url ?? null, width: W, height: H, out: OUT,
+           frames: shots.map((f) => ({ t: f.t, file: f.name, label: f.label ?? null })), sheet: sheetFile });

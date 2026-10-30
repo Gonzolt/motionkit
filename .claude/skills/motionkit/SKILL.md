@@ -27,7 +27,12 @@ and motion blur (sub-frame sampling) all go wrong at once.
    Never type seconds into a film; name scenes in `lib/scenes.js` style tables.
 4. **Picture.** Build the DOM once, write `render(t)`. Check single moves with
    `node tools/strip.mjs --film <brand>/<film> --from A --to B --fps 30`, the
-   whole film with `tools/shot.mjs --sheet 24`.
+   whole film with `tools/shot.mjs --sheet 24`, a move's path with
+   `tools/onion.mjs --range A..B`. Before export run `tools/framelint.mjs`
+   (clipped, off-frame or overlapping text, missing fonts and assets). Once a film
+   is approved, `tools/snapshot.mjs --update`, then plain `snapshot.mjs` after
+   any lib/ change to see which frames moved. Add `--json` when a script reads
+   the result.
    Effects (grain, split, flash, leaks, sparks…) hang off the same cues:
    `film-fx`. Captions come from the same words.js: `subtitles`.
 5. **Sound.** `make_sfx.py` synthesises effects on the *same* cues, so a thump

@@ -6,8 +6,11 @@
   "description": "Code-only motion design: kinetic type, shape transitions, camera rigs and motion blur, rendered frame by frame from a function of time.",
   "engines": { "node": ">=20" },
   "scripts": {
-    "test": "node tests/motion.test.mjs && node tests/captions.test.mjs && node tests/fx.test.mjs && node tests/social.test.mjs && node tools/checkimports.mjs && node tools/lint.mjs",
+    "test": "node tests/motion.test.mjs && node tests/captions.test.mjs && node tests/fx.test.mjs && node tests/social.test.mjs && node tests/tools.test.mjs && node tools/checkimports.mjs && node tools/lint.mjs",
     "lint": "node tools/lint.mjs",
+    "framelint": "node tools/framelint.mjs",
+    "snapshot": "node tools/snapshot.mjs",
+    "onion": "node tools/onion.mjs",
     "serve": "python3 tools/serve.py",
     "shot": "node tools/shot.mjs",
     "strip": "node tools/strip.mjs",

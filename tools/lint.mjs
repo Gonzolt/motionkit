@@ -146,6 +146,12 @@ for (const brand of brands) {
   if (!sawTheme) add(dir, 0, `brand "${brand}" has no theme.js — every colour in its films is therefore unanchored`);
 }
 
+// --json: one object on stdout, same contract as the capture tools (tools/report.mjs).
+if (args.json && args.json !== 'false') {
+  process.stdout.write(JSON.stringify({ brands, clean: !problems.length, problems }) + '\n');
+  process.exit(problems.length ? 1 : 0);
+}
+
 if (!problems.length) {
   console.log(`clean · ${brands.join(', ')}`);
   process.exit(0);

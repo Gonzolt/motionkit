@@ -4,6 +4,7 @@
  *   node tools/strip.mjs --film lab/motionlab --from 2.5 --to 3.3 --fps 15
  *   node tools/strip.mjs --film lab/motionlab --from 7.9 --to 8.5 --fps 20 --cols 10
  *   node tools/strip.mjs --film lab/motionlab --from 2.9 --to 3.6 --fps 60 --probe '#word'
+ *   node tools/strip.mjs --film lab/motionlab --from 2.5 --to 3.3 --probe '#word' --json
  *
  * WHY. A contact sheet (`shot.mjs --sheet`) is for the whole film's rhythm. It
  * cannot see a 0.3 s transition: at 12 sheet frames over 14 s you may get ONE
@@ -24,10 +25,13 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { parseArgs, filmUrl, filmWantsGL, startServer, withPage, waitForFilm } from './browser.mjs';
+import { reporter, assertFilm } from './report.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = parseArgs(process.argv.slice(2));
-if (!args.film) { console.error('need --film <brand>/<name>'); process.exit(2); }
+const rep = reporter(args);
+await assertFilm(ROOT, args.film, rep);
+const result = { film: args.film, frames: [], strip: null, probe: null };
 
 const PORT = Number(args.port ?? 9361);
 const W = Number(args.width ?? 1080), H = Number(args.height ?? 1920);
@@ -57,6 +61,7 @@ try {
       const name = join(OUT, `f${String(i).padStart(4, '0')}.jpg`);
       await writeFile(name, Buffer.from(data, 'base64'));
       files.push({ name, t });
+      result.frames.push({ t, file: name });
       if (sel) {
         const m = await cdp.eval(`(() => {
           const el = document.querySelector(${JSON.stringify(sel)});
@@ -81,23 +86,26 @@ try {
     const layout = files.map((_, i) => `${repeat('w0', i % cols)}_${repeat('h0', Math.floor(i / cols))}`).join('|');
     const filter = `${drawn};${files.map((_, i) => `[v${i}]`).join('')}xstack=inputs=${files.length}:layout=${layout}:fill=black[out]`;
     const r = spawnSync('ffmpeg', ['-y', ...inputs, '-filter_complex', filter, '-map', '[out]', sheet], { encoding: 'utf8' });
-    if (r.status !== 0) console.error(r.stderr.split('\n').slice(-6).join('\n'));
-    else console.log(`strip ${files.length} frames @ ${fps} fps, ${from.toFixed(2)}–${to.toFixed(2)} s (${cols}x${rows}): ${sheet}`);
+    if (r.status !== 0) rep.warn(r.error ? `strip sheet skipped: ffmpeg did not run (${r.error.code ?? r.error.message}); the frames are in ${OUT}`
+                                         : r.stderr.split('\n').slice(-6).join('\n'));
+    else result.strip = sheet, rep.log(`strip ${files.length} frames @ ${fps} fps, ${from.toFixed(2)}–${to.toFixed(2)} s (${cols}x${rows}): ${sheet}`);
 
     /* ---- the probe ---- */
     if (sel) {
       if (samples.every((s) => Number.isNaN(s.x))) {
-        console.error(`\nprobe: nothing matches ${sel}`);
+        rep.warn(`\nprobe: nothing matches ${sel}`);
+        result.probe = { selector: sel, matched: false };
       } else {
         await writeFile(join(OUT, 'probe.csv'),
           ['t,x,y,w,h,opacity', ...samples.map((s) => [s.t, s.x, s.y, s.w, s.h, s.o].map((v) => +v.toFixed(3)).join(','))].join('\n'));
-        report(samples, fps);
+        result.probe = { selector: sel, matched: true, csv: join(OUT, 'probe.csv'), ...report(samples, fps) };
       }
     }
   });
 } finally {
   server.close();
 }
+rep.done(result);
 
 /* Which channel moved most, and what shape did that movement have? */
 function report(samples, fps) {
@@ -109,10 +117,10 @@ function report(samples, fps) {
   // Opacity is 0…1 so it needs weighting up to compete with pixels.
   const scored = chans.map((k) => ({ k, r: range(k), score: range(k) * (k === 'o' ? 500 : 1) }));
   const main = scored.sort((a, b) => b.score - a.score)[0];
-  console.log('\nprobe', sel);
-  console.log('  ' + scored.map((c) => `${c.k}: Δ${c.r.toFixed(1)}`).join('   '));
-  if (main.r < 0.5 && main.k !== 'o') { console.log('  nothing moved in this window'); return; }
-  if (main.k === 'o' && main.r < 0.01) { console.log('  nothing moved in this window'); return; }
+  rep.log('\nprobe', sel);
+  rep.log('  ' + scored.map((c) => `${c.k}: Δ${c.r.toFixed(1)}`).join('   '));
+  if (main.r < 0.5 && main.k !== 'o') { rep.log('  nothing moved in this window'); return { moved: false }; }
+  if (main.k === 'o' && main.r < 0.01) { rep.log('  nothing moved in this window'); return { moved: false }; }
 
   const v = samples.map((s) => s[main.k]);
   const a = v[0], b = v[v.length - 1];
@@ -132,25 +140,27 @@ function report(samples, fps) {
   }
 
   const f = (x) => (x === null ? '—' : x.toFixed(3) + ' s');
-  console.log(`  channel ${main.k}: ${a.toFixed(1)} → ${b.toFixed(1)}`);
-  console.log(`  starts ${f(tStart)}   50 % ${f(t50)}   90 % ${f(t90)}   98 % ${f(t98)}`);
-  console.log(`  peak speed ${peak.toFixed(0)} /s at ${peakT.toFixed(3)} s   overshoot ${(over * 100).toFixed(1)} %`);
+  rep.log(`  channel ${main.k}: ${a.toFixed(1)} → ${b.toFixed(1)}`);
+  rep.log(`  starts ${f(tStart)}   50 % ${f(t50)}   90 % ${f(t90)}   98 % ${f(t98)}`);
+  rep.log(`  peak speed ${peak.toFixed(0)} /s at ${peakT.toFixed(3)} s   overshoot ${(over * 100).toFixed(1)} %`);
 
+  let kind = null;
   if (t50 !== null && t98 !== null && t98 > tStart) {
     const half = (t50 - tStart) / (t98 - tStart);
     const peakFrac = (peakT - tStart) / (t98 - tStart);
-    let kind;
     if (over > 0.03) kind = 'springs / overshoots';
     else if (half < 0.22) kind = 'very strong ease-out (expo): most of the travel at the start';
     else if (half < 0.36) kind = 'ease-out';
     else if (half < 0.6 && peakFrac > 0.3 && peakFrac < 0.7) kind = 'ease-in-out (symmetric)';
     else if (half >= 0.6) kind = 'ease-in: slow start — avoid for anything entering';
     else kind = 'close to linear';
-    console.log(`  50 % at ${(half * 100).toFixed(0)} % of the move, peak speed at ${(peakFrac * 100).toFixed(0)} %  →  ${kind}`);
+    rep.log(`  50 % at ${(half * 100).toFixed(0)} % of the move, peak speed at ${(peakFrac * 100).toFixed(0)} %  →  ${kind}`);
   }
   // A one-line plot, so the curve can be read without opening the CSV.
   const bars = '▁▂▃▄▅▆▇█';
   const line = prog.map((p) => bars[Math.max(0, Math.min(7, Math.round(p * 7)))]).join('');
-  console.log(`  ${line}`);
-  console.log(`  csv: ${join(OUT, 'probe.csv')}`);
+  rep.log(`  ${line}`);
+  rep.log(`  csv: ${join(OUT, 'probe.csv')}`);
+  return { moved: true, channel: main.k, from: a, to: b, start: tStart, t50, t90, t98,
+           peakSpeed: +peak.toFixed(1), peakAt: +peakT.toFixed(3), overshoot: +over.toFixed(4), curve: kind };
 }
