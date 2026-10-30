@@ -4,7 +4,7 @@ Claude Code loads these automatically when it runs inside this repo. Start
 with `motionkit`: it explains the film pipeline and routes to the rest.
 
 Taken from the source repos: voice, editing, music and sound, plus two
-picture skills (type, grade). `film-fx`, `subtitles`, `frag-edit` and the four Social
+picture skills (type, grade) and two render skills for the Kinetograph engine. `film-fx`, `subtitles`, `frag-edit` and the four Social
 skills are written for this repo's own `lib/` and `tools/`. The Social set
 takes its shape (shared brand profile, hook lab, carousel builder, repurpose,
 variant ids fed by results) from ideas in public social-media skill packs; no
@@ -24,6 +24,8 @@ text or code was copied from them.
 | Social | [repurpose](repurpose/SKILL.md) | One source → brief, video variants, carousel and checked post copy per platform | new |
 | Picture | [kinetic-typography](kinetic-typography/SKILL.md) | Headline reveals, split-text staggers, lyric and title cards (CSS, GSAP, Remotion recipes) | iart-ai/kinetic-typography-skills |
 | Picture | [color-grading-finishing](color-grading-finishing/SKILL.md) | Correction, shot matching, looks, LUTs, delivery colour for footage | calesthio/generative-media-skills |
+| Render | [kinetograph](kinetograph/SKILL.md) | Kinetograph, a GPU video engine with no browser: Remotion-style TSX or HTML/GSAP, stills, strips, inspect, lint, render (not the motionkit film pipeline) | 0xS4N4TG/kinetograph |
+| Render | [kinetograph-migrate](kinetograph-migrate/SKILL.md) | Moving an existing Remotion project onto Kinetograph; what will not work | 0xS4N4TG/kinetograph |
 | Voice | [piper-tts](piper-tts/SKILL.md) | Offline, free TTS (Norwegian too), used by `TTS_ENGINE=piper` | new, docs from piper1-gpl |
 | Voice | [elevenlabs-text-to-speech](elevenlabs-text-to-speech/SKILL.md) | ElevenLabs TTS, models, voice settings, streaming | elevenlabs/skills |
 | Voice | [genai-voice-designer](genai-voice-designer/SKILL.md) | Voice design, v3 audio tags, narration direction | AlterLab FC |
@@ -59,6 +61,7 @@ text or code was copied from them.
 | [Gonzolt/claude-skills](https://github.com/Gonzolt/claude-skills) project set | yours | 6 audio and editing skills |
 | [iart-ai/kinetic-typography-skills](https://github.com/iart-ai/kinetic-typography-skills) | MIT | `kinetic-typography` (with contact-sheet scripts from the Gonzolt/claude-skills copy) |
 | [calesthio/generative-media-skills](https://github.com/calesthio/generative-media-skills) via Gonzolt/claude-skills | MIT | `color-grading-finishing` |
+| [0xS4N4TG/kinetograph](https://github.com/0xS4N4TG/kinetograph) ([kinetograph.dev](https://kinetograph.dev/)) | PolyForm Small Business 1.0.0 (free for individuals and companies under 100 people and $1M revenue; others need a commercial licence) | the 2 skills from `packages/cli/skills` at v0.2.5; left out the engine (Rust, Node packages, ~170 MB), examples, site and docs. The engine runs through `npx kinetograph` |
 | [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) | MIT | nothing: it has no voice, editing, music or sound skills |
 
 Every copied folder keeps its upstream `LICENSE` where the source had one.
