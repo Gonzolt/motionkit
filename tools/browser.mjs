@@ -9,18 +9,32 @@ import { spawn, spawnSync } from 'node:child_process';
 import { once } from 'node:events';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { homedir } from 'node:os';
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, resolve, normalize } from 'node:path';
 
 /** The newest puppeteer-managed Chromium, or a system browser if one turns up. */
 export function findChrome() {
-  const cache = join(process.env.HOME, '.cache', 'puppeteer', 'chrome');
+  // An explicit browser wins: CHROME=/path/to/chrome node tools/export.mjs …
+  if (process.env.CHROME && existsSync(process.env.CHROME)) return process.env.CHROME;
+  const win = process.platform === 'win32';
+  const cache = join(process.env.HOME ?? homedir(), '.cache', 'puppeteer', 'chrome');
   if (existsSync(cache)) {
     const builds = readdirSync(cache).sort();
     for (const b of builds.reverse()) {
-      const exe = join(cache, b, 'chrome-linux64', 'chrome');
+      const exe = win ? join(cache, b, 'chrome-win64', 'chrome.exe') : join(cache, b, 'chrome-linux64', 'chrome');
       if (existsSync(exe)) return exe;
+    }
+  }
+  /* Native Windows (no WSL): there is no `which`, so look where Chrome and
+     Edge install themselves. Both speak the same DevTools protocol. */
+  if (win) {
+    const roots = [process.env.PROGRAMFILES, process.env['PROGRAMFILES(X86)'], process.env.LOCALAPPDATA].filter(Boolean);
+    for (const r of roots) {
+      for (const rel of ['Google/Chrome/Application/chrome.exe', 'Microsoft/Edge/Application/msedge.exe']) {
+        if (existsSync(join(r, rel))) return join(r, rel);
+      }
     }
   }
   for (const name of ['chromium', 'chromium-browser', 'google-chrome', 'brave']) {

@@ -30,7 +30,7 @@ const args = parseArgs(process.argv.slice(2));
 if (!args.film) { console.error('need --film <brand>/<name>'); process.exit(2); }
 
 const PORT = Number(args.port ?? 9361);
-const W = 1080, H = 1920;
+const W = Number(args.width ?? 1080), H = Number(args.height ?? 1920);
 const OUT = resolve(args.out ?? join(ROOT, 'out', 'strips', args.film.replace('/', '-')));
 const TILE = Number(args.tile ?? 270);
 const sel = args.probe ? args.probe.replace(/^['"]|['"]$/g, '') : null;
@@ -52,7 +52,7 @@ try {
     const files = [], samples = [];
     for (let i = 0; i < times.length; i++) {
       const t = times[i];
-      await cdp.eval(`window.PK.frame(${t.toFixed(5)})`);
+      await cdp.eval(`window.PK.frame(${t.toFixed(5)})`, true);
       const { data } = await cdp.send('Page.captureScreenshot', { format: 'jpeg', quality: 88, fromSurface: true });
       const name = join(OUT, `f${String(i).padStart(4, '0')}.jpg`);
       await writeFile(name, Buffer.from(data, 'base64'));

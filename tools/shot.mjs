@@ -66,7 +66,7 @@ try {
     const files = [];
     for (let i = 0; i < times.length; i++) {
       const t = times[i];
-      await cdp.eval(`window.PK.frame(${t.toFixed(5)})`);
+      await cdp.eval(`window.PK.frame(${t.toFixed(5)})`, true);
       const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', fromSurface: true });
       const tag = labels ? `${String(i).padStart(2, '0')}-${labels[i]}` : `t${t.toFixed(2).replace('.', '_')}`;
       const name = join(OUT, `${tag}.png`);

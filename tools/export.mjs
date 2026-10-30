@@ -173,7 +173,7 @@ for (let i = 0; i < total; i++) {
   for (let j = 0; j < BLUR; j++) {
     // Sub-frames are spread across the open shutter, centred on the frame's own time.
     const t = from + i / FPS + (BLUR === 1 ? 0 : ((j + 0.5) / BLUR - 0.5) * SHUTTER / FPS);
-    await cdp.eval(`window.PK.frame(${Math.max(0, t).toFixed(5)})`);
+    await cdp.eval(`window.PK.frame(${Math.max(0, t).toFixed(5)})`, true);
     const { data } = await cdp.send('Page.captureScreenshot', {
       format: FORMAT, quality: 100, captureBeyondViewport: false, fromSurface: true,
     });
