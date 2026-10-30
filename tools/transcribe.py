@@ -7,7 +7,7 @@ tools/subs.mjs all read it:  {duration, lines: [{i, text, start, end}], words: [
     python tools/transcribe.py take.mp4                         # -> take.words.json
     python tools/transcribe.py take.mp4 --lang no --model medium
     python tools/transcribe.py take.mp4 --js brands/lab/films/take.words.js
-    python tools/transcribe.py take.mp4 --fix fixes.txt --prompt "Claude, motionkit, Valorant"
+    python tools/transcribe.py take.mp4 --fix fixes.txt --prompt "Claude, motionkit, Remotion"
 
 --fix is one correction per line, `heard=meant` ("cloud=Claude"). ASR reliably
 destroys exactly the names the audience is watching for; --prompt helps

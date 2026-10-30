@@ -170,7 +170,7 @@ layers one by one in the browser pane (`window.PK.frame(t)` then set
 ## Not here
 
 - Shader transitions (morph, ripple, cube): they need both scenes as textures;
-  scenes are DOM. Possible on footage films with `data-gl` (see `lab/ace`).
+  scenes are DOM. Possible on footage films that set `data-gl` on `<html>`.
   Check each transition's licence before copying one in.
 - Pixelate / mosaic on DOM: do it in ffmpeg after export.
 - Grading footage properly: `color-grading-finishing`. Type reveals:

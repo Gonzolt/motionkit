@@ -11,3 +11,7 @@ out/
 .env.*
 __pycache__/
 !.claude/skills/agent-sounds/hooks/sounds/**/*.wav
+
+# Gonzolt/frag-edits (private) is cloned here; see brands/frag/README.md
+brands/frag/
+.claude/skills/frag-edit
